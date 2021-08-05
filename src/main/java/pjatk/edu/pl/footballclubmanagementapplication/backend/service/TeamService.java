@@ -7,6 +7,9 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.User;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.TeamRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TeamService implements CrudService<Team> {
 
@@ -23,18 +26,26 @@ public class TeamService implements CrudService<Team> {
     }
 
     @Override
-    public Team save(User currentUser, Team entity) {
-        return teamRepository.save(entity);
+    public Team save(Team entity) {
+        return getRepository().save(entity);
     }
 
     @Override
-    public void delete(User currentUser, Team entity) {
-        teamRepository.delete(entity);
+    public void delete(Team entity) {
+        getRepository().delete(entity);
     }
 
     @Override
     public Team createNew(User currentUser) {
         return new Team();
+    }
+
+    public List<Team> findAll(){
+        return getRepository().findAll();
+    }
+
+    public List<String> findAllTeamNames(){
+        return getRepository().findAll().stream().map(team -> team.getName()).collect(Collectors.toList());
     }
 
 

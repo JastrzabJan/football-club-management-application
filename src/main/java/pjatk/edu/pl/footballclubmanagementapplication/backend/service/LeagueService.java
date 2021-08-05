@@ -23,13 +23,13 @@ public class LeagueService implements CrudService<League> {
     }
 
     @Override
-    public League save(User currentUser, League entity) {
-        return this.leagueRepository.save(entity);
+    public League save(League entity) {
+        return getRepository().save(entity);
     }
 
     @Override
-    public void delete(User currentUser, League entity) {
-        this.leagueRepository.delete(entity);
+    public void delete(League entity) {
+        getRepository().delete(entity);
     }
 
     @Override

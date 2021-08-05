@@ -1,5 +1,8 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.repository;
 
-public interface PlayerRepository extends UserRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Player;
+
+public interface PlayerRepository extends JpaRepository<Player, Long> {
 
 }

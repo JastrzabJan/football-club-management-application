@@ -1,25 +1,35 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
-@Entity(name="UserInfo")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity(name = "UserInfo")
 public class User extends AbstractEntity {
 
+
+    @OneToOne(mappedBy = "user")
+    private Player player;
+
+    @OneToOne(mappedBy = "user")
+    private Coach coach;
 
     @NotEmpty
     @Email
@@ -31,25 +41,10 @@ public class User extends AbstractEntity {
     @Size(min = 4, max = 255)
     private String passwordHash;
 
-    @NotBlank
-    @Size(max = 255)
-    private String name;
+    @NotNull(message = "User role cannot be null")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @NotBlank
-    @Size(max = 255)
-    private String surname;
-
-    @NotBlank
-    @Size(max = 255)
-    private String role;
-
-    private boolean locked = false;
-
-    @PrePersist
-    @PreUpdate
-    private void prepareData(){
-        this.email = email == null ? null : email.toLowerCase();
-    }
 
 }
 

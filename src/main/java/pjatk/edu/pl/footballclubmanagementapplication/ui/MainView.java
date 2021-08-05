@@ -1,43 +1,27 @@
 package pjatk.edu.pl.footballclubmanagementapplication.ui;
 
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.littemplate.LitTemplate;
-import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.template.Id;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 
-import java.awt.*;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_ROOT;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_HOME;
+
 
 /**
  * A Designer generated component for the main-view template.
- *
+ * <p>
  * Designer will add and remove fields with @Id mappings but
  * does not overwrite or otherwise change this file.
  */
 @Tag("main-view")
-@JsModule("./src/views/main-view.ts")
-public class MainView extends LitTemplate {
+@Route(value = PAGE_ROOT, layout = MainLayout.class)
+@PageTitle(value = TITLE_HOME)
+public class MainView extends AppLayout {
 
-    @Id("vaadinVerticalLayout")
-    private VerticalLayout vaadinVerticalLayout;
-    @Id("vaadinHorizontalLayout1")
-    private HorizontalLayout vaadinHorizontalLayout1;
-    @Id("vaadinHorizontalLayout")
-    private HorizontalLayout vaadinHorizontalLayout;
-
-    MenuBar menuBar = new MenuBar();
-    MenuItem login = menuBar.addItem("Login");
-
-
-    /**
-     * Creates a new MainView.
-     */
     public MainView() {
-        // You can initialise any data required for the connected UI components here.
     }
 
 }

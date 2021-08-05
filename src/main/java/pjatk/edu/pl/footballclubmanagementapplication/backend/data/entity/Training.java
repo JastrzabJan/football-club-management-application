@@ -1,7 +1,11 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,16 +16,16 @@ import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.Set;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Data
 public class Training extends AbstractEntity{
 
     @ManyToOne
-    @JoinColumn(name = "id")
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     private Coach coach;
 
     private Date trainingDate;

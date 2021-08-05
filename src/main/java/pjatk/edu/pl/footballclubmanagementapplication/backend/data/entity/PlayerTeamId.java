@@ -1,16 +1,26 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Embeddable
-@Data
 public class PlayerTeamId implements Serializable {
 
+
+    @NotNull
     private Long playerId;
+    @NotNull
     private Long teamId;
 
     // Has to be overwritten for Composite Key

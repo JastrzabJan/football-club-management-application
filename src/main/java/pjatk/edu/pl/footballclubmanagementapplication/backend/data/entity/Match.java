@@ -1,14 +1,20 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Data
 public class Match extends AbstractEntity {
 
     private String opponent;
@@ -19,7 +25,6 @@ public class Match extends AbstractEntity {
     private boolean host;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     private Team team;
 
 

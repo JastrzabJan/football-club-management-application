@@ -23,13 +23,13 @@ public class SeasonService implements CrudService<Season> {
     }
 
     @Override
-    public Season save(User currentUser, Season entity) {
-        return this.seasonRepository.save(entity);
+    public Season save(Season entity) {
+        return getRepository().save(entity);
     }
 
     @Override
-    public void delete(User currentUser, Season entity) {
-        this.seasonRepository.delete(entity);
+    public void delete(Season entity) {
+        getRepository().delete(entity);
     }
 
     @Override

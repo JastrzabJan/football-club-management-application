@@ -10,19 +10,19 @@ public interface CrudService<T extends AbstractEntity> {
 
     JpaRepository<T, Long> getRepository();
 
-    default T save(User currentUser, T entity) {
+    default T save(T entity) {
         return getRepository().saveAndFlush(entity);
     }
 
-    default void delete(User currentUser, T entity) {
+    default void delete(T entity) {
         if (entity == null) {
             throw new EntityNotFoundException();
         }
         getRepository().delete(entity);
     }
 
-    default void delete(User currentUser, long id) {
-        delete(currentUser, load(id));
+    default void delete(long id) {
+        delete(load(id));
     }
 
     default long count() {

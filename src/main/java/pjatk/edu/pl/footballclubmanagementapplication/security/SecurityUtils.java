@@ -10,9 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import pjatk.edu.pl.footballclubmanagementapplication.ui.AccessDeniedView;
-import pjatk.edu.pl.footballclubmanagementapplication.ui.CustomRouteNotFoundError;
-import pjatk.edu.pl.footballclubmanagementapplication.ui.LoginView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -30,12 +27,6 @@ public final class SecurityUtils {
 		// Util methods only
 	}
 
-	/**
-	 * Gets the user name of the currently signed in user.
-	 *
-	 * @return the user name of the current user or <code>null</code> if the user
-	 *         has not signed in
-	 */
 	public static String getUsername() {
 		SecurityContext context = SecurityContextHolder.getContext();
 		Object principal = context.getAuthentication().getPrincipal();
@@ -45,55 +36,6 @@ public final class SecurityUtils {
 		}
 		// Anonymous or no authentication.
 		return null;
-	}
-
-	/**
-	 * Checks if access is granted for the current user for the given secured view,
-	 * defined by the view class.
-	 *
-	 * @param securedClass View class
-	 * @return true if access is granted, false otherwise.
-	 */
-	public static boolean isAccessGranted(Class<?> securedClass) {
-		final boolean publicView = LoginView.class.equals(securedClass)
-			|| AccessDeniedView.class.equals(securedClass)
-			|| CustomRouteNotFoundError.class.equals(securedClass);
-
-		// Always allow access to public views
-		if (publicView) {
-			return true;
-		}
-
-		Authentication userAuthentication = SecurityContextHolder.getContext().getAuthentication();
-
-		// All other views require authentication
-		if (!isUserLoggedIn(userAuthentication)) {
-			return false;
-		}
-
-		// Allow if no roles are required.
-		Secured secured = AnnotationUtils.findAnnotation(securedClass, Secured.class);
-		if (secured == null) {
-			return true;
-		}
-
-		List<String> allowedRoles = Arrays.asList(secured.value());
-		return userAuthentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-				.anyMatch(allowedRoles::contains);
-	}
-
-	/**
-	 * Checks if the user is logged in.
-	 *
-	 * @return true if the user is logged in. False otherwise.
-	 */
-	public static boolean isUserLoggedIn() {
-		return isUserLoggedIn(SecurityContextHolder.getContext().getAuthentication());
-	}
-
-	private static boolean isUserLoggedIn(Authentication authentication) {
-		return authentication != null
-			&& !(authentication instanceof AnonymousAuthenticationToken);
 	}
 
 	/**
@@ -111,4 +53,29 @@ public final class SecurityUtils {
 				&& Stream.of(RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
 	}
 
+	/**
+	 * Tests if some user is authenticated. As Spring Security always will create an {@link org.springframework.security.authentication.AnonymousAuthenticationToken}
+	 * we have to ignore those tokens explicitly.
+	 */
+	public static boolean isAccessGranted(Class<?> securedClass) {
+		// Allow if no roles are required.
+		Secured secured = AnnotationUtils.findAnnotation(securedClass, Secured.class);
+		if (secured == null) {
+			return true; //
+		}
+
+		// lookup needed role in user roles
+		List<String> allowedRoles = Arrays.asList(secured.value());
+		Authentication userAuthentication = SecurityContextHolder.getContext().getAuthentication();
+		return userAuthentication.getAuthorities().stream() //
+				.map(GrantedAuthority::getAuthority)
+				.anyMatch(allowedRoles::contains);
+	}
+
+	public static boolean isUserLoggedIn() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication != null
+				&& !(authentication instanceof AnonymousAuthenticationToken) //
+				&& authentication.isAuthenticated();
+	}
 }
