@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
@@ -17,9 +20,21 @@ import java.util.Set;
 @Entity
 public class Season extends AbstractEntity {
 
-    private Date startDate;
-    private Date endDate;
+    @NotNull
+    private LocalDate startDate;
+    @NotNull
+    private LocalDate endDate;
 
     @OneToMany(mappedBy = "season")
     private Set<TeamLeagueSeason> teamLeagueSeasons;
+
+
+    public String getName() {
+        return startDate.getYear() + "/" + endDate.getYear();
+    }
+
+    @Override
+    public String toString() {
+        return startDate.getYear() + "/" + endDate.getYear();
+    }
 }

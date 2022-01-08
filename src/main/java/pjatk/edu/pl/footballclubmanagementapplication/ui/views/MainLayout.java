@@ -2,6 +2,7 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -12,10 +13,16 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinServlet;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Season;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.MainView;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.CoachesView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.LeaguesView;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.MatchesView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.PlayersView;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.SeasonsView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.TeamsView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.TrainingsView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.UsersView;
@@ -23,10 +30,13 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.UsersVie
 import java.util.ArrayList;
 import java.util.List;
 
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_COACHES;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_HOME;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_LEAGUES;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_LOGOUT;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_MATCHES;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_PLAYERS;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_SEASONS;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_TEAMS;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_TRAININGS;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.TITLE_USERS;
@@ -34,9 +44,11 @@ import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendCo
 public class MainLayout extends VerticalLayout implements RouterLayout {
 
     public MainLayout() {
+
         Tabs tabs = createMenuTabs();
         add(tabs);
-        add(new H1("Vaadin Router Tutorial Inc."));
+        add(new H1("Football Management Application"));
+
     }
 
     private static Tabs createMenuTabs() {
@@ -57,6 +69,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         if (SecurityUtils.isAccessGranted(TeamsView.class)) {
             tabs.add(createTab(VaadinIcon.USER, TITLE_TEAMS, TeamsView.class));
         }
+        if (SecurityUtils.isAccessGranted(SeasonsView.class)) {
+            tabs.add(createTab(VaadinIcon.BOOKMARK, TITLE_SEASONS, SeasonsView.class));
+        }
         if (SecurityUtils.isAccessGranted(LeaguesView.class)) {
             tabs.add(createTab(VaadinIcon.USER, TITLE_LEAGUES, LeaguesView.class));
         }
@@ -66,6 +81,13 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         if (SecurityUtils.isAccessGranted(UsersView.class)) {
             tabs.add(createTab(VaadinIcon.USER, TITLE_USERS, UsersView.class));
         }
+        if (SecurityUtils.isAccessGranted(CoachesView.class)) {
+            tabs.add(createTab(VaadinIcon.USER, TITLE_COACHES, CoachesView.class));
+        }
+        if (SecurityUtils.isAccessGranted(MatchesView.class)) {
+            tabs.add(createTab(VaadinIcon.GAMEPAD, TITLE_MATCHES, MatchesView.class));
+        }
+
         final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
         final Tab logoutTab = createTab(createLogoutLink(contextPath));
         tabs.add(logoutTab);

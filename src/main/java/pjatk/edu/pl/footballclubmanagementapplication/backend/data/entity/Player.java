@@ -14,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +38,7 @@ public class Player extends AbstractEntity {
     @Size(max = 255)
     private String name;
 
-    @NotBlank(message = "Player suranem cannot be blank")
+    @NotBlank(message = "Player surname cannot be blank")
     @Size(max = 255)
     private String surname;
 
@@ -61,13 +62,21 @@ public class Player extends AbstractEntity {
 
     private Integer Number;
 
-    @OneToMany(
-            mappedBy = "player",
+    @ManyToMany(cascade = CascadeType.MERGE,
             fetch = FetchType.EAGER)
-    private Set<PlayerTeam> playerTeams = new HashSet<>();
+    @JoinTable(
+            name = "player_teams",
+            joinColumns = {@JoinColumn(name = "player_id")},
+            inverseJoinColumns = {@JoinColumn(name = "team_id")}
+    )
+    private Set<Team> teams = new HashSet<>();
 
     @OneToMany(mappedBy = "player",
             fetch = FetchType.EAGER)
     private Set<PlayerTrainingAttendance> playerTrainingAttendances;
 
+    @Override
+    public String toString() {
+        return name + " " + surname + " , POSITION: " + position;
+    }
 }

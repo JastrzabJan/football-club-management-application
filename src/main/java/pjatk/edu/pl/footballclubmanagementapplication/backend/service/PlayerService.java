@@ -16,19 +16,19 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.matchesTerm;
+
 @Service
 public class PlayerService implements CrudService<Player> {
 
     private final PlayerRepository playerRepository;
     private final UserService userService;
-    private final PlayerTeamService playerTeamService;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository, UserService userService, PlayerTeamService playerTeamService, PasswordEncoder passwordEncoder) {
+    public PlayerService(PlayerRepository playerRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.playerRepository = playerRepository;
         this.userService = userService;
-        this.playerTeamService = playerTeamService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -53,11 +53,25 @@ public class PlayerService implements CrudService<Player> {
     }
 
     public List<Player> findAll() {
-        return playerRepository.findAll();
+        return getRepository().findAll();
     }
 
     public List<PlayerDTO> getAllPlayersDTO() {
         return playerRepository.findAll().stream().map(this::convertToPlayerDTO).collect(Collectors.toList());
+    }
+
+    public List<PlayerDTO> getAllPlayersWithFilter(String filterText) {
+        return playerRepository
+                .findAll()
+                .stream()
+                .map(this::convertToPlayerDTO)
+                .filter(e -> {
+                    if (filterText.isEmpty()) {
+                        return true;
+                    } else {
+                        return matchesTerm(e.getName(), filterText) || matchesTerm(e.getSurname(), filterText);
+                    }
+                }).collect(Collectors.toList());
     }
 
     private PlayerDTO convertToPlayerDTO(Player player) {
@@ -74,8 +88,8 @@ public class PlayerService implements CrudService<Player> {
         playerDTO.setAddress(player.getAddress());
         playerDTO.setPosition(player.getPosition());
         playerDTO.setBirthDate(player.getBirthDate());
-        playerDTO.setTeamNames(player.getPlayerTeams().stream().map(playerTeam -> playerTeam.getTeam().getName()).collect(Collectors.toList()));
-        playerDTO.setPlayerTeams(player.getPlayerTeams());
+        playerDTO.setTeamNames(player.getTeams().stream().map(playerTeam -> playerTeam.getName()).collect(Collectors.toList()));
+        playerDTO.setTeams(player.getTeams());
         playerDTO.setPlayerTrainingAttendances(player.getPlayerTrainingAttendances());
         return playerDTO;
     }
@@ -87,7 +101,7 @@ public class PlayerService implements CrudService<Player> {
             Player player = playerRepository.findById(playerDTO.getId()).get();
             player.setName(playerDTO.getName());
             player.setSurname(playerDTO.getSurname());
-            player.setPlayerTeams(playerDTO.getPlayerTeams());
+            player.setTeams(playerDTO.getTeams());
             player.setPESEL(playerDTO.getPESEL());
             player.setPlayerTrainingAttendances(playerDTO.getPlayerTrainingAttendances());
             player.setNumber(playerDTO.getNumber());
@@ -113,7 +127,7 @@ public class PlayerService implements CrudService<Player> {
             Player player = new Player();
             player.setName(playerDTO.getName());
             player.setSurname(playerDTO.getSurname());
-            player.setPlayerTeams(playerDTO.getPlayerTeams());
+            player.setTeams(playerDTO.getTeams());
             player.setPESEL(playerDTO.getPESEL());
             player.setPlayerTrainingAttendances(playerDTO.getPlayerTrainingAttendances());
             player.setNumber(playerDTO.getNumber());

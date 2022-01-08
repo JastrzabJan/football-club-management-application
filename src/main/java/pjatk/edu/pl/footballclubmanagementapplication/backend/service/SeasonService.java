@@ -7,6 +7,8 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Season
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.User;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.SeasonRepository;
 
+import java.util.List;
+
 @Service
 public class SeasonService implements CrudService<Season> {
 
@@ -35,5 +37,13 @@ public class SeasonService implements CrudService<Season> {
     @Override
     public Season createNew(User currentUser) {
         return new Season();
+    }
+
+    public List<Season> getAllSeasons() {
+        return getRepository().findAll();
+    }
+
+    public Season getNewestSeason(){
+        return getRepository().findAll().stream().findFirst().get();
     }
 }

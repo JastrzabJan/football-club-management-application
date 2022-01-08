@@ -10,6 +10,8 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.TeamRep
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.matchesTerm;
+
 @Service
 public class TeamService implements CrudService<Team> {
 
@@ -40,13 +42,23 @@ public class TeamService implements CrudService<Team> {
         return new Team();
     }
 
-    public List<Team> findAll(){
+    public List<Team> findAll() {
         return getRepository().findAll();
     }
 
-    public List<String> findAllTeamNames(){
+    public List<String> findAllTeamNames() {
         return getRepository().findAll().stream().map(team -> team.getName()).collect(Collectors.toList());
     }
 
+    public List<Team> getAllTeamsWithFilter(String filterText) {
+        return getRepository().findAll().stream().filter(e ->
+        {
+            if (filterText.isEmpty()) {
+                return true;
+            } else {
+                return matchesTerm(e.getName(), filterText) || matchesTerm(e.getTeamClass(), filterText);
+            }
+        }).collect(Collectors.toList());
+    }
 
 }

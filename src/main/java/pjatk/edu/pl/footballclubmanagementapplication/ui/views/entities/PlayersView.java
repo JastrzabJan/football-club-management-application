@@ -2,47 +2,63 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.PlayerService;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.PlayerForm;
+
+import java.util.List;
 
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.COACH_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_PLAYERS;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.generateSearchField;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.matchesTerm;
 
 @Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE})
 @Route(value = PAGE_PLAYERS, layout = MainLayout.class)
 public class PlayersView extends VerticalLayout {
 
     private final PlayerService playerService;
+    private final TeamService teamService;
     private Grid<PlayerDTO> playerGrid = new Grid<>();
-
-
-    public PlayersView(PlayerService playerService) {
+    private TextField searchField;
+    public PlayersView(PlayerService playerService, TeamService teamService) {
         this.playerService = playerService;
-        PlayerForm playerForm = new PlayerForm(this, playerService);
+        this.teamService = teamService;
+
+        PlayerForm playerForm = new PlayerForm(this, playerService, this.teamService);
 
         playerForm.setPlayer(null);
+        searchField = generateSearchField();
+        searchField.addValueChangeListener(e -> updateList());
 
         if (SecurityUtils.isAccessGranted(UsersView.class)) {
-            playerGrid.addColumn(PlayerDTO::getEmail).setHeader("Email");
-            playerGrid.addColumn(PlayerDTO::getPESEL).setHeader("PESEL");
+            playerGrid.addColumn(PlayerDTO::getEmail).setHeader("Email").setSortable(true);
+            playerGrid.addColumn(PlayerDTO::getPESEL).setHeader("PESEL").setSortable(true);
+            playerGrid.addColumn(PlayerDTO::getAddress).setHeader("Address").setSortable(true);
+            playerGrid.addColumn(PlayerDTO::getPhoneNumber).setHeader("Phone Number").setSortable(true);
         }
-        playerGrid.addColumn(PlayerDTO::getName).setHeader("Name");
-        playerGrid.addColumn(PlayerDTO::getSurname).setHeader("Surname");
-        playerGrid.addColumn(PlayerDTO::getBirthDate).setHeader("Birth Date");
-        playerGrid.addColumn(PlayerDTO::getAddress).setHeader("Address");
-        playerGrid.addColumn(PlayerDTO::getPhoneNumber).setHeader("Phone Number");
-        playerGrid.addColumn(PlayerDTO::getPosition).setHeader("Position");
-        playerGrid.addColumn(PlayerDTO::getNumber).setHeader("Number");
-        playerGrid.addColumn(PlayerDTO::getTeamNames).setHeader("Teams");
+        playerGrid.addColumn(PlayerDTO::getName).setHeader("Name").setSortable(true);
+        playerGrid.addColumn(PlayerDTO::getSurname).setHeader("Surname").setSortable(true);
+        playerGrid.addColumn(PlayerDTO::getBirthDate).setHeader("Birth Date").setSortable(true);
+        playerGrid.addColumn(PlayerDTO::getPosition).setHeader("Position").setSortable(true);
+        playerGrid.addColumn(PlayerDTO::getNumber).setHeader("Number").setSortable(true);
+        playerGrid.addColumn(PlayerDTO::getTeamNames).setHeader("Teams").setSortable(true);
 
         playerGrid.asSingleSelect().addValueChangeListener(event -> playerForm.setPlayer(playerGrid.asSingleSelect().getValue()));
 
@@ -51,18 +67,18 @@ public class PlayersView extends VerticalLayout {
             playerGrid.asSingleSelect().clear();
             playerForm.setPlayer(new PlayerDTO());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(addPlayerButton);
+        HorizontalLayout protectedToolbar = new HorizontalLayout(addPlayerButton, searchField);
+        HorizontalLayout regularToolbar = new HorizontalLayout(searchField);
         setSizeFull();
         if (SecurityUtils.isAccessGranted(UsersView.class)) {
-            add(toolbar, playerGrid, playerForm);
+            add(protectedToolbar, searchField, playerGrid, playerForm);
         } else {
-            add(playerGrid, playerForm);
+            add(regularToolbar, searchField, playerGrid);
         }
         updateList();
-
     }
 
     public void updateList() {
-        playerGrid.setItems(playerService.getAllPlayersDTO());
+        this.playerGrid.setItems(playerService.getAllPlayersWithFilter(searchField.getValue()));
     }
 }
