@@ -6,7 +6,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.League;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Season;
@@ -14,21 +13,18 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.LeagueService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.SeasonService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamLeagueSeasonService;
-import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.LeaguesView;
-
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_LEAGUE;
 
 public class LeagueComponent extends VerticalLayout {
 
     @Autowired
-    private TeamLeagueSeasonService teamLeagueSeasonService;
+    private final TeamLeagueSeasonService teamLeagueSeasonService;
     @Autowired
-    private SeasonService seasonService;
+    private final SeasonService seasonService;
     @Autowired
-    private LeagueService leagueService;
+    private final LeagueService leagueService;
 
-    private Grid<Team> teamGrid = new Grid<>(Team.class);
+    private final Grid<Team> teamGrid = new Grid<>(Team.class);
 
     private League league;
 

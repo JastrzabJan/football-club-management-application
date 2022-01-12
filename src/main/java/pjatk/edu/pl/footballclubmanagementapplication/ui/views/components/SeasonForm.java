@@ -8,22 +8,21 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Season;
-import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.SeasonService;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.SeasonsView;
 
 public class SeasonForm extends FormLayout {
 
-    private SeasonsView seasonsView;
+    private final SeasonsView seasonsView;
     private final SeasonService seasonService;
 
-    private DatePicker startDate = new DatePicker("Start Date");
-    private DatePicker endDate = new DatePicker("End Date");
+    private final DatePicker startDate = new DatePicker("Start Date");
+    private final DatePicker endDate = new DatePicker("End Date");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
 
-    private Binder<Season> binder = new BeanValidationBinder<>(Season.class);
+    private final BeanValidationBinder<Season> binder = new BeanValidationBinder<>(Season.class);
 
     public SeasonForm(SeasonsView seasonsView, SeasonService seasonService) {
         this.seasonsView = seasonsView;

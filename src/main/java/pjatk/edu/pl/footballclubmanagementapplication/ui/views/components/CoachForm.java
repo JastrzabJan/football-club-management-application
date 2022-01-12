@@ -7,13 +7,12 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import org.vaadin.gatanaso.MultiselectComboBox;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Coach;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Qualifications;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.CoachDTO;
@@ -25,31 +24,29 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.UsersVie
 
 public class CoachForm extends FormLayout {
 
-    private CoachesView coachesView;
+    private final CoachesView coachesView;
     private final CoachService coachService;
-    private final TeamService teamService;
 
-    private EmailField email = new EmailField("Email");
-    private PasswordField password = new PasswordField("Password");
-    private TextField name = new TextField("Name");
-    private TextField surname = new TextField("Surname");
-    private TextField address = new TextField("Address");
-    private TextField phoneNumber = new TextField("Phone Number");
-    private ComboBox<Qualifications> qualifications = new ComboBox<>("Qualifications");
-    private MultiselectComboBox<Team> teams = new MultiselectComboBox<>("Teams");
-    private DatePicker birthDate = new DatePicker("Birthdate");
+    private final EmailField email = new EmailField("Email");
+    private final PasswordField password = new PasswordField("Password");
+    private final TextField name = new TextField("Name");
+    private final TextField surname = new TextField("Surname");
+    private final TextField address = new TextField("Address");
+    private final TextField phoneNumber = new TextField("Phone Number");
+    private final ComboBox<Qualifications> qualifications = new ComboBox<>("Qualifications");
+    private final MultiselectComboBox<Team> teams = new MultiselectComboBox<>("Teams");
+    private final DatePicker birthDate = new DatePicker("Birthdate");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
 
-    private final Binder<CoachDTO> binder = new BeanValidationBinder<>(CoachDTO.class);
+    private final BeanValidationBinder<CoachDTO> binder = new BeanValidationBinder<>(CoachDTO.class);
 
     public CoachForm(CoachesView coachesView, CoachService coachService, TeamService teamService) {
 
         save.setEnabled(false);
         this.coachService = coachService;
         this.coachesView = coachesView;
-        this.teamService = teamService;
 
         qualifications.setItems(Qualifications.values());
         teams.setItems(teamService.findAll());
@@ -62,7 +59,7 @@ public class CoachForm extends FormLayout {
         qualifications.setRequired(true);
         teams.setRequired(true);
         birthDate.setRequired(true);
-
+        binder.bind(teams, CoachDTO::getTeams, CoachDTO::setTeams);
         binder.bindInstanceFields(this);
 
         binder.addStatusChangeListener(event -> {

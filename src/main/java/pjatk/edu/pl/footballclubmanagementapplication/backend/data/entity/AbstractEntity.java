@@ -1,7 +1,5 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
-import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

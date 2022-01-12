@@ -21,7 +21,6 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.SeasonR
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.TeamLeagueSeasonRepository;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.TeamRepository;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.UserRepository;
-import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamLeagueSeasonService;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -39,7 +38,7 @@ public class DataGenerator {
     private final TeamRepository teamRepository;
     private final CoachRepository coachRepository;
     private final TeamLeagueSeasonRepository teamLeagueSeasonRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public DataGenerator(UserRepository userRepository, PlayerRepository playerRepository, SeasonRepository seasonRepository, LeagueRepository leagueRepository, TeamRepository teamRepository, CoachRepository coachRepository, TeamLeagueSeasonRepository teamLeagueSeasonRepository, PasswordEncoder passwordEncoder) {

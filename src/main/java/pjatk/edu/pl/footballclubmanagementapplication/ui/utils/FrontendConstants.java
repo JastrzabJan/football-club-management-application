@@ -14,6 +14,7 @@ public class FrontendConstants {
     public static final String PAGE_MATCHES = "matches";
     public static final String PAGE_USERS = "users";
     public static final String PAGE_SEASONS = "seasons";
+    public static final String PAGE_SCHEDULE = "schedule";
     // TITLES
     public static final String TITLE_HOME = "Home";
     public static final String TITLE_LOGOUT = "Logout";
@@ -24,6 +25,7 @@ public class FrontendConstants {
     public static final String TITLE_LEAGUE = "League";
     public static final String TITLE_TRAININGS = "Trainings";
     public static final String TITLE_MATCHES = "Matches";
+    public static final String TITLE_SCHEDULE = "Schedule";
     public static final String TITLE_USERS = "Users";
     public static final String TITLE_SEASONS = "Seasons";
     public static final String TITLE_NOT_FOUND = "Page was not found";
@@ -33,7 +35,6 @@ public class FrontendConstants {
     public static final String MANAGER_ROLE = "Manager";
     public static final String COACH_ROLE = "Coach";
     public static final String PLAYER_ROLE = "Player";
-
 
 
 }

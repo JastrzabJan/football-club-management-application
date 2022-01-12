@@ -20,7 +20,7 @@ import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendCo
 public class SeasonsView extends VerticalLayout {
 
     private final SeasonService seasonService;
-    private Grid<Season> seasonGrid = new Grid<>();
+    private final Grid<Season> seasonGrid = new Grid<>();
 
     public SeasonsView(SeasonService seasonService) {
         this.seasonService = seasonService;

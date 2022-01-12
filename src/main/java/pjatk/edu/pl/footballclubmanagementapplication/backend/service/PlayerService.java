@@ -1,11 +1,14 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.service;
 
+import com.vaadin.flow.router.NotFoundException;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Player;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Role;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.User;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.PlayerRepository;
@@ -23,7 +26,7 @@ public class PlayerService implements CrudService<Player> {
 
     private final PlayerRepository playerRepository;
     private final UserService userService;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepository, UserService userService, PasswordEncoder passwordEncoder) {
@@ -54,6 +57,10 @@ public class PlayerService implements CrudService<Player> {
 
     public List<Player> findAll() {
         return getRepository().findAll();
+    }
+
+    public Player findByUsernameAndTeam(String username, Team team) {
+        return getRepository().findAll().stream().filter(player -> player.getUser().getEmail().equals(username) && player.getTeams().contains(team)).findFirst().orElse(null);
     }
 
     public List<PlayerDTO> getAllPlayersDTO() {

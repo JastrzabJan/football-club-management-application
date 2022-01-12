@@ -5,7 +5,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.CoachDTO;
@@ -15,25 +14,21 @@ import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.CoachForm;
 
-import java.awt.*;
-import java.util.List;
-
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.COACH_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_COACHES;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PLAYER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.generateSearchField;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.matchesTerm;
 
-@Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE, PLAYER_ROLE})
+@Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE})
 @Route(value = PAGE_COACHES, layout = MainLayout.class)
 public class CoachesView extends VerticalLayout {
 
     private final CoachService coachService;
     private final TeamService teamService;
-    private Grid<CoachDTO> coachGrid = new Grid<>();
-    private TextField searchField;
+    private final Grid<CoachDTO> coachGrid = new Grid<>();
+    private final TextField searchField;
 
     public CoachesView(CoachService coachService, TeamService teamService) {
         this.coachService = coachService;

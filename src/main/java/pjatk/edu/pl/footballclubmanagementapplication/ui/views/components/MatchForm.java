@@ -20,21 +20,21 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.MatchesV
 
 public class MatchForm extends FormLayout {
 
-    private MatchesView matchesView;
+    private final MatchesView matchesView;
     private final MatchService matchService;
     private final TeamService teamService;
 
-    private TextField opponentTeam = new TextField("Opponent Team");
-    private TextField place = new TextField("Place");
-    private IntegerField goalsHome = new IntegerField("Goals");
-    private IntegerField goalsAway = new IntegerField("Opponent Goals");
-    private DatePicker gameDate = new DatePicker("Game Day");
-    private ComboBox<Team> team = new ComboBox<>("Team");
+    private final TextField opponentTeam = new TextField("Opponent Team");
+    private final TextField place = new TextField("Place");
+    private final IntegerField goalsHome = new IntegerField("Goals");
+    private final IntegerField goalsAway = new IntegerField("Opponent Goals");
+    private final DatePicker gameDate = new DatePicker("Game Day");
+    private final ComboBox<Team> team = new ComboBox<>("Team");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
 
-    private Binder<Match> binder = new BeanValidationBinder<>(Match.class);
+    private final BeanValidationBinder<Match> binder = new BeanValidationBinder<>(Match.class);
 
     public MatchForm(MatchesView matchesView, MatchService matchService, TeamService teamService) {
         this.matchesView = matchesView;
@@ -49,7 +49,6 @@ public class MatchForm extends FormLayout {
 //        binder.bind(place, Match::getPlace, Match::setPlace);
 //        binder.bind(goalsHome, Match::getGoalsHome, Match::setGoalsHome);
 //        binder.bind(goalsAway, Match::getGoalsAway, Match::setGoalsAway);
-//        binder.bind(gameDate, Match::getGameDay, Match::setGameDay);
 //        binder.bind(team, Match::getTeam, Match::setTeam);
 
         HorizontalLayout buttons = new HorizontalLayout(save, delete);

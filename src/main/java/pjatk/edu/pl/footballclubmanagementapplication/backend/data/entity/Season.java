@@ -1,7 +1,5 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Set;
 
 @Getter
@@ -20,9 +16,9 @@ import java.util.Set;
 @Entity
 public class Season extends AbstractEntity {
 
-    @NotNull
+    @NotNull(message = "Start Date cannot be empty")
     private LocalDate startDate;
-    @NotNull
+    @NotNull(message = "End Date cannot be empty")
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "season")

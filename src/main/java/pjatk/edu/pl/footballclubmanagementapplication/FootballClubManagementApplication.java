@@ -1,5 +1,7 @@
 package pjatk.edu.pl.footballclubmanagementapplication;
 
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.spring.annotation.EnableVaadin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,6 +22,8 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.MainView;
         UserService.class}, exclude = ErrorMvcAutoConfiguration.class)
 @EntityScan(basePackageClasses = {User.class})
 @EnableJpaRepositories(basePackageClasses = {UserRepository.class})
+@CssImport("./styles/shared-styles.css")
+@EnableVaadin(value = {"org.vaadin.stefan", "pjatk.edu.pl"})
 public class FootballClubManagementApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

@@ -5,20 +5,15 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import pjatk.edu.pl.footballclubmanagementapplication.backend.data.DataGenerator;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.League;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Season;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
-import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.LeagueService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.SeasonService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamLeagueSeasonService;
@@ -26,15 +21,11 @@ import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.LeagueForm;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.COACH_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_LEAGUES;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.generateSearchField;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.matchesTerm;
 
 @Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE})
 @Route(value = PAGE_LEAGUES, layout = MainLayout.class)
@@ -47,10 +38,10 @@ public class LeaguesView extends VerticalLayout {
     @Autowired
     private final SeasonService seasonService;
 
-    private Grid<League> leaguesGrid = new Grid<>();
-    private Grid<Team> leagueGrid = new Grid<>();
+    private final Grid<League> leaguesGrid = new Grid<>();
+    private final Grid<Team> leagueGrid = new Grid<>();
 
-    private TextField searchField;
+    private final TextField searchField;
 
     public void setLeague(League league) {
         this.league = league;

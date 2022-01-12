@@ -2,6 +2,7 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.treegrid.TreeGrid;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Player;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.CoachService;
@@ -32,8 +34,8 @@ import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtil
 public class TeamsView extends VerticalLayout {
     private final TeamService teamService;
     private final CoachService coachService;
-    private TreeGrid<Team> teamGrid = new TreeGrid<>();
-    private TextField searchField;
+    private final Grid<Team> teamGrid = new TreeGrid<>();
+    private final TextField searchField;
 
     public TeamsView(TeamService teamService, CoachService coachService) {
         this.teamService = teamService;
@@ -61,7 +63,7 @@ public class TeamsView extends VerticalLayout {
         });
         HorizontalLayout toolbar = new HorizontalLayout(addTeamButton);
         setSizeFull();
-        if (SecurityUtils.isAccessGranted(CoachesView.class)) {
+        if (SecurityUtils.isAccessGranted(UsersView.class)) {
             add(toolbar, searchField, teamGrid, teamForm);
         } else {
             add(searchField, teamGrid);

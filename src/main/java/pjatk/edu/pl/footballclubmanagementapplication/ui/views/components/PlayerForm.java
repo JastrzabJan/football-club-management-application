@@ -25,26 +25,26 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.UsersVie
 
 public class PlayerForm extends FormLayout {
 
-    private PlayersView playersView;
+    private final PlayersView playersView;
     private final PlayerService playerService;
     private final TeamService teamService;
 
-    private EmailField email = new EmailField("Email");
-    private PasswordField password = new PasswordField("Password");
-    private TextField name = new TextField("Name");
-    private TextField surname = new TextField("Surname");
-    private TextField address = new TextField("Address");
-    private TextField pesel = new TextField("PESEL");
-    private TextField phoneNumber = new TextField("Phone Number");
-    private ComboBox<Position> position = new ComboBox<>("Position");
-    private MultiselectComboBox<Team> teams = new MultiselectComboBox<>("Teams");
-    private DatePicker birthDate = new DatePicker("Birthdate");
-    private IntegerField number = new IntegerField("Number");
+    private final EmailField email = new EmailField("Email");
+    private final PasswordField password = new PasswordField("Password");
+    private final TextField name = new TextField("Name");
+    private final TextField surname = new TextField("Surname");
+    private final TextField address = new TextField("Address");
+    private final TextField pesel = new TextField("PESEL");
+    private final TextField phoneNumber = new TextField("Phone Number");
+    private final ComboBox<Position> position = new ComboBox<>("Position");
+    private final MultiselectComboBox<Team> teams = new MultiselectComboBox<>("Teams");
+    private final DatePicker birthDate = new DatePicker("Birthdate");
+    private final IntegerField number = new IntegerField("Number");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
 
-    private Binder<PlayerDTO> binder = new BeanValidationBinder<>(PlayerDTO.class);
+    private final BeanValidationBinder<PlayerDTO> binder = new BeanValidationBinder<>(PlayerDTO.class);
 
     public PlayerForm(PlayersView playersView, PlayerService playerService, TeamService teamService) {
         this.playerService = playerService;
@@ -54,17 +54,17 @@ public class PlayerForm extends FormLayout {
         email.setErrorMessage("Please enter a valid email address");
         position.setItems(Position.values());
         teams.setItems(teamService.findAll());
-        binder.forField(password).bind(PlayerDTO::getPassword, PlayerDTO::setPassword);
-        binder.bind(password, PlayerDTO::getPassword, PlayerDTO::setPassword);
-        binder.bind(pesel, PlayerDTO::getPESEL, PlayerDTO::setPESEL);
-        binder.bind(name, PlayerDTO::getName, PlayerDTO::setName);
-        binder.bind(surname, PlayerDTO::getSurname, PlayerDTO::setSurname);
-        binder.bind(address, PlayerDTO::getAddress, PlayerDTO::setAddress);
-        binder.bind(birthDate, PlayerDTO::getBirthDate, PlayerDTO::setBirthDate);
-        binder.bind(phoneNumber, PlayerDTO::getPhoneNumber, PlayerDTO::setPhoneNumber);
-        binder.bind(position, PlayerDTO::getPosition, PlayerDTO::setPosition);
-        binder.bind(teams, PlayerDTO::getTeams, PlayerDTO::setTeams);
-        binder.bind(number, PlayerDTO::getNumber, PlayerDTO::setNumber);
+//        binder.forField(password).bind(PlayerDTO::getPassword, PlayerDTO::setPassword);
+//        binder.bind(password, PlayerDTO::getPassword, PlayerDTO::setPassword);
+//        binder.bind(pesel, PlayerDTO::getPESEL, PlayerDTO::setPESEL);
+//        binder.bind(name, PlayerDTO::getName, PlayerDTO::setName);
+//        binder.bind(surname, PlayerDTO::getSurname, PlayerDTO::setSurname);
+//        binder.bind(address, PlayerDTO::getAddress, PlayerDTO::setAddress);
+//        binder.bind(birthDate, PlayerDTO::getBirthDate, PlayerDTO::setBirthDate);
+//        binder.bind(phoneNumber, PlayerDTO::getPhoneNumber, PlayerDTO::setPhoneNumber);
+//        binder.bind(position, PlayerDTO::getPosition, PlayerDTO::setPosition);
+//        binder.bind(teams, PlayerDTO::getTeams, PlayerDTO::setTeams);
+//        binder.bind(number, PlayerDTO::getNumber, PlayerDTO::setNumber);
 
         HorizontalLayout buttons = new HorizontalLayout(save, delete);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

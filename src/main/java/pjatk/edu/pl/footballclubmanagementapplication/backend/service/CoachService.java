@@ -22,7 +22,7 @@ public class CoachService implements CrudService<Coach> {
 
     private final CoachRepository coachRepository;
     private final UserService userService;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public CoachService(CoachRepository coachRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.coachRepository = coachRepository;

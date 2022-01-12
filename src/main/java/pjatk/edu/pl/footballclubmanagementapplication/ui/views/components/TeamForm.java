@@ -19,29 +19,28 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.TeamsVie
 
 public class TeamForm extends FormLayout {
 
-    private TeamsView teamsView;
+    private final TeamsView teamsView;
     private final TeamService teamService;
     private final CoachService coachService;
 
-    private TextField name = new TextField("Name");
-    private TextField teamClass = new TextField("Team Class");
-    private ComboBox<CoachDTO> coach = new ComboBox<>("Coach");
+    private final TextField name = new TextField("Name");
+    private final TextField teamClass = new TextField("Team Class");
+    private final ComboBox<Coach> coach = new ComboBox<>("Coach");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
 
-    private final Binder<Team> binder = new BeanValidationBinder<>(Team.class);
+    private final BeanValidationBinder<Team> binder = new BeanValidationBinder<>(Team.class);
 
     public TeamForm(TeamsView teamsView, TeamService teamService, CoachService coachService) {
         this.teamService = teamService;
         this.teamsView = teamsView;
         this.coachService = coachService;
 
-        coach.setItems(coachService.getAllCoachesDTO());
+        coach.setItems(coachService.getRepository().findAll());
         name.setRequired(true);
         teamClass.setRequired(true);
         coach.setRequired(true);
-
         binder.bindInstanceFields(this);
 
         HorizontalLayout buttons = new HorizontalLayout(save, delete);
@@ -53,11 +52,12 @@ public class TeamForm extends FormLayout {
         });
 
         if (SecurityUtils.isAccessGranted(CoachesView.class)) {
-            add(name, teamClass, buttons);
+            add(name, teamClass, coach, buttons);
         } else {
             name.setReadOnly(true);
             teamClass.setReadOnly(true);
-            add(name, teamClass);
+            coach.setReadOnly(true);
+            add(name, teamClass, coach);
         }
 
         save.addClickListener(buttonClickEvent -> save());

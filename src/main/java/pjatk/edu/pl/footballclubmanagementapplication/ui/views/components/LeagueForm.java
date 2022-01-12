@@ -13,15 +13,15 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.LeaguesV
 
 public class LeagueForm extends FormLayout {
 
-    private LeaguesView leaguesView;
+    private final LeaguesView leaguesView;
     private final LeagueService leagueService;
 
-    private TextField name = new TextField("Name");
+    private final TextField name = new TextField("Name");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-    private Button viewLeagueButton = new Button ("View");
-    private final Binder<League> binder = new BeanValidationBinder<>(League.class);
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
+    private final Button viewLeagueButton = new Button ("View");
+    private final BeanValidationBinder<League> binder = new BeanValidationBinder<>(League.class);
 
     public LeagueForm(LeaguesView leaguesView, LeagueService leagueService) {
 

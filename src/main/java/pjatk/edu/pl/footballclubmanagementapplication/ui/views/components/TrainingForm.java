@@ -3,12 +3,10 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Coach;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Training;
@@ -22,36 +20,32 @@ import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.UsersVie
 
 public class TrainingForm extends FormLayout {
 
-    private TrainingsView trainingsView;
+    private final TrainingsView trainingsView;
     private final TrainingService trainingService;
-    private final CoachService coachService;
-    private final TeamService teamService;
 
-    private DatePicker trainingDate = new DatePicker("Training Date");
-    private ComboBox<TrainingType> trainingType = new ComboBox<>("Training Type");
-    private ComboBox<Coach> coach = new ComboBox<>("Coach");
-    private ComboBox<Team> team = new ComboBox<>("Teams");
+    private final DateTimePicker trainingStart = new DateTimePicker("Training Date");
+    private final DateTimePicker trainingEnd = new DateTimePicker("Training Date");
+    private final ComboBox<TrainingType> trainingType = new ComboBox<>("Training Type");
+    private final ComboBox<Coach> coach = new ComboBox<>("Coach");
+    private final ComboBox<Team> team = new ComboBox<>("Teams");
 
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete");
 
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-
-    private final Binder<Training> binder = new BeanValidationBinder<>(Training.class);
+    private final BeanValidationBinder<Training> binder = new BeanValidationBinder<>(Training.class);
 
     public TrainingForm(TrainingsView trainingsView, TrainingService trainingService, CoachService coachService, TeamService teamService) {
         this.trainingsView = trainingsView;
         this.trainingService = trainingService;
-        this.coachService = coachService;
-        this.teamService = teamService;
 
         trainingType.setItems(TrainingType.values());
         coach.setItems(coachService.findAll());
         team.setItems(teamService.findAll());
 
+
         coach.setRequired(true);
         team.setRequired(true);
         trainingType.setRequired(true);
-        trainingDate.setRequired(true);
 
         binder.bindInstanceFields(this);
         binder.addStatusChangeListener(event -> {
@@ -63,9 +57,9 @@ public class TrainingForm extends FormLayout {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         if (SecurityUtils.isAccessGranted(UsersView.class)) {
-            add(trainingDate, trainingType, coach, team, buttons);
+            add(trainingStart, trainingEnd, trainingType, coach, team, buttons);
         } else {
-            add(trainingDate, trainingType, coach, team);
+            add(trainingStart, trainingEnd, trainingType, coach, team);
         }
 
         save.addClickListener(buttonClickEvent -> save());
@@ -78,7 +72,7 @@ public class TrainingForm extends FormLayout {
             setVisible(false);
         } else {
             setVisible(true);
-            trainingDate.focus();
+            trainingStart.focus();
         }
     }
 

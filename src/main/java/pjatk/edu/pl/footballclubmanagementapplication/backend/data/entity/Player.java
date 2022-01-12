@@ -1,11 +1,8 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,7 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -34,11 +31,11 @@ public class Player extends AbstractEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank(message = "Player name cannot be blank")
+    @NotEmpty(message = "Player name cannot be empty")
     @Size(max = 255)
     private String name;
 
-    @NotBlank(message = "Player surname cannot be blank")
+    @NotEmpty(message = "Player surname cannot be empty")
     @Size(max = 255)
     private String surname;
 
@@ -48,15 +45,15 @@ public class Player extends AbstractEntity {
 
     private LocalDate birthDate;
 
-    @NotBlank(message = "Player PESEL cannot be null")
+    @NotEmpty(message = "Player PESEL cannot be null")
     @Size(min = 8, max = 15, message = "Wrong PESEL size")
     private String PESEL;
 
-    @NotBlank(message = "Player phone Number cannot be blank")
+    @NotEmpty(message = "Player phone Number cannot be empty")
     @Size(min = 6, max = 50, message = "Wrong phoneNumber size")
     private String phoneNumber;
 
-    @NotBlank(message = "Player address cannot be blank")
+    @NotEmpty(message = "Player address cannot be empty")
     @Size(max = 255)
     private String Address;
 

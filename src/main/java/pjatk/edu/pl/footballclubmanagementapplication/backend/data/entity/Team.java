@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +18,9 @@ import java.util.Set;
 public class Team extends AbstractEntity {
 
 
+    @NotEmpty(message = "Name cannot be empty")
     private String name;
+    @NotEmpty(message = "Team class cannot be empty")
     private String teamClass;
 
     @ManyToOne

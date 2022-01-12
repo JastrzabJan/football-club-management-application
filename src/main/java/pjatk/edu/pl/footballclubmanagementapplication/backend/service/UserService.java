@@ -1,6 +1,5 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.service;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;

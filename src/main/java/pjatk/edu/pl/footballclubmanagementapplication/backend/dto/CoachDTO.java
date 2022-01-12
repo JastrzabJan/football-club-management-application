@@ -23,37 +23,36 @@ public class CoachDTO {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @NotNull
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = "Email cannot be empty")
     @Size(min = 2, message = "Email must be at least 8 characters long")
     private String email;
 
     private String passwordHash;
-
-    @NotNull
     private String password;
 
     @NotNull(message = "Coach role cannot be empty")
     private Role role;
 
-    @NotBlank(message = "Coach name cannot be blank")
-    @Size(max = 255)
+    @NotEmpty(message = "Coach name cannot be empty")
+    @Size(min = 3, max = 50, message = "Name must be at least 3 characters long")
     private String name;
 
-    @NotEmpty
-    @Size(min = 3, message = "Surname must be at least 3 characters long")
+    @NotEmpty(message = "Surname cannot be empty")
+    @Size(min = 3, max = 50, message = "Surname must be at least 3 characters long")
     private String surname;
 
     @NotNull(message = "Coach birth date cannot be empty")
     private LocalDate birthDate;
 
-    @NotBlank(message = "Player phone Number cannot be blank")
-    @Size(min = 6, max = 50, message = "Wrong phoneNumber size")
+    @NotEmpty(message = "Coach phone Number cannot be empty")
+    @Size(min = 6, max = 15, message = "Phone number size must be between 6 and 15")
     private String phoneNumber;
 
-    @NotBlank(message = "Coach address cannot be blank")
-    @Size(max = 255)
+    @NotEmpty(message = "Coach address cannot be empty")
+    @Size(max = 255, message = "Coach address cannot be longer than 255 characters")
     private String address;
 
     private List<String> teamNames;

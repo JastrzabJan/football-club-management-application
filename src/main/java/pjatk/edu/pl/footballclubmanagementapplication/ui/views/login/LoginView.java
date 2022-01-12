@@ -1,6 +1,8 @@
 package pjatk.edu.pl.footballclubmanagementapplication.ui.views.login;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -18,16 +20,19 @@ import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendCo
 
 @Route(value = PAGE_LOGIN)
 @PageTitle("Login Page")
+@CssImport("./styles/shared-styles.css")
 public class LoginView extends VerticalLayout {
 
-    private LoginOverlay login = new LoginOverlay(); //
+    private final LoginOverlay login = new LoginOverlay(); //
 
     @Autowired
     public LoginView(AuthenticationManager authenticationManager, //
                      CustomRequestCache requestCache) {
         // configures login dialog and adds it to the main view
         login.setOpened(true);
-        login.setTitle("Login");
+        login.setTitle("PJATK FC Club Site");
+        login.setDescription("Please log in");
+        login.setForgotPasswordButtonVisible(false);
 //        login.setDescription("Login ");
 
         add(login);
@@ -39,7 +44,8 @@ public class LoginView extends VerticalLayout {
                         .authenticate(new UsernamePasswordAuthenticationToken(e.getUsername(), e.getPassword())); //
 
                 // if authentication was successful we will update the security context and redirect to the page requested first
-                SecurityContextHolder.getContext().setAuthentication(authentication); //
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                //
                 login.close(); //
                 UI.getCurrent().navigate(requestCache.resolveRedirectUrl()); //
 

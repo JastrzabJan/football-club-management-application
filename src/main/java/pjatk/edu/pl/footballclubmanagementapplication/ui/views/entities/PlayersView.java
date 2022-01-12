@@ -2,15 +2,9 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
@@ -20,14 +14,11 @@ import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.PlayerForm;
 
-import java.util.List;
-
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.COACH_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_PLAYERS;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.generateSearchField;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.matchesTerm;
 
 @Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE})
 @Route(value = PAGE_PLAYERS, layout = MainLayout.class)
@@ -35,8 +26,8 @@ public class PlayersView extends VerticalLayout {
 
     private final PlayerService playerService;
     private final TeamService teamService;
-    private Grid<PlayerDTO> playerGrid = new Grid<>();
-    private TextField searchField;
+    private final Grid<PlayerDTO> playerGrid = new Grid<>();
+    private final TextField searchField;
     public PlayersView(PlayerService playerService, TeamService teamService) {
         this.playerService = playerService;
         this.teamService = teamService;
