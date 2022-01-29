@@ -3,6 +3,7 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -11,6 +12,8 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.League
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.LeagueService;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.LeaguesView;
 
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.utils.ButtonProvider.*;
+
 public class LeagueForm extends FormLayout {
 
     private final LeaguesView leaguesView;
@@ -18,8 +21,11 @@ public class LeagueForm extends FormLayout {
 
     private final TextField name = new TextField("Name");
 
-    private final Button save = new Button("Save");
-    private final Button delete = new Button("Delete");
+    Notification validationErrorNotification = createValidationErrorNotification();
+
+    private final Button save = createDeleteButton();
+    private final Button delete = createSaveButton();
+
     private final Button viewLeagueButton = new Button ("View");
     private final BeanValidationBinder<League> binder = new BeanValidationBinder<>(League.class);
 
@@ -27,11 +33,9 @@ public class LeagueForm extends FormLayout {
 
         this.leagueService = leagueService;
         this.leaguesView = leaguesView;
-        HorizontalLayout buttons = new HorizontalLayout(save, delete, viewLeagueButton);
 
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttons = new HorizontalLayout(save, delete, validationErrorNotification);
         viewLeagueButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         add(name, buttons);
 
@@ -51,10 +55,14 @@ public class LeagueForm extends FormLayout {
     }
 
     private void save() {
-        League league = binder.getBean();
-        leagueService.save(league);
-        leaguesView.updateList();
-        setLeague(null);
+        if(binder.validate().isOk()) {
+            League league = binder.getBean();
+            leagueService.save(league);
+            leaguesView.updateList();
+            setLeague(null);
+        }else{
+            validationErrorNotification.open();
+        }
     }
 
     private void delete() {

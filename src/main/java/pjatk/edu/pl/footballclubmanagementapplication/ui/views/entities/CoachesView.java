@@ -2,26 +2,28 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.CoachDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.CoachService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.ManagerAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.CoachForm;
 
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.COACH_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_COACHES;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PLAYER_ROLE;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.generateSearchField;
 
-@Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE})
+@Secured({ADMIN_ROLE, MANAGER_ROLE})
 @Route(value = PAGE_COACHES, layout = MainLayout.class)
 public class CoachesView extends VerticalLayout {
 
@@ -40,7 +42,8 @@ public class CoachesView extends VerticalLayout {
         this.searchField = generateSearchField();
         this.searchField.addValueChangeListener(e -> updateList());
 
-        if (SecurityUtils.isAccessGranted(UsersView.class)) {
+        if (SecurityUtils.isAccessGranted(ManagerAccessMock.class)) {
+            coachGrid.asSingleSelect().addValueChangeListener(event -> coachForm.setCoach(coachGrid.asSingleSelect().getValue()));
             coachGrid.addColumn(CoachDTO::getEmail).setHeader("Email").setSortable(true);
             coachGrid.addColumn(CoachDTO::getAddress).setHeader("Address").setSortable(true);
             coachGrid.addColumn(CoachDTO::getQualifications).setHeader("Qualifications").setSortable(true);
@@ -49,7 +52,13 @@ public class CoachesView extends VerticalLayout {
         coachGrid.addColumn(CoachDTO::getSurname).setHeader("Surname").setSortable(true);
         coachGrid.addColumn(CoachDTO::getBirthDate).setHeader("Birth Date").setSortable(true);
         coachGrid.addColumn(CoachDTO::getPhoneNumber).setHeader("Phone Number").setSortable(true);
-        coachGrid.addColumn(CoachDTO::getTeamNames).setHeader("Teams").setSortable(true);
+
+        coachGrid.addComponentColumn(coachDTO -> {
+            ListBox<Team> teamsList = new ListBox<>();
+            teamsList.setItems(coachDTO.getTeams());
+            teamsList.setReadOnly(true);
+            return teamsList;
+        }).setHeader("Teams").setAutoWidth(true);
 
         coachGrid.asSingleSelect().addValueChangeListener(event -> coachForm.setCoach(coachGrid.asSingleSelect().getValue()));
 
@@ -62,7 +71,7 @@ public class CoachesView extends VerticalLayout {
         HorizontalLayout toolbar = new HorizontalLayout(addCoachButton);
         setSizeFull();
 
-        if (SecurityUtils.isAccessGranted(UsersView.class)) {
+        if (SecurityUtils.isAccessGranted(ManagerAccessMock.class)) {
             add(toolbar, searchField, coachGrid, coachForm);
         } else {
             add(searchField, coachGrid);

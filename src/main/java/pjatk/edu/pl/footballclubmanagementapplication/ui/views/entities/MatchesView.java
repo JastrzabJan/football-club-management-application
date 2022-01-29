@@ -16,6 +16,7 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.service.MatchServi
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.CoachAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.MatchForm;
 
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
@@ -55,8 +56,6 @@ public class MatchesView extends VerticalLayout {
         HeaderRow matchGridHeaderRow = matchGrid.appendHeaderRow();
         matchGridHeaderRow.getCells().get(0).setComponent(createFilterHeader());
 
-        matchGrid.asSingleSelect().addValueChangeListener(event -> matchForm.setMatch(matchGrid.asSingleSelect().getValue()));
-
         Button addLeagueButton = new Button("Add Match");
         addLeagueButton.addClickListener(event -> {
             matchGrid.asSingleSelect().clear();
@@ -64,7 +63,8 @@ public class MatchesView extends VerticalLayout {
         });
         HorizontalLayout toolbar = new HorizontalLayout(addLeagueButton);
         setSizeFull();
-        if (SecurityUtils.isAccessGranted(CoachesView.class)) {
+        if (SecurityUtils.isAccessGranted(CoachAccessMock.class)) {
+            matchGrid.asSingleSelect().addValueChangeListener(event -> matchForm.setMatch(matchGrid.asSingleSelect().getValue()));
             add(toolbar, searchField, matchGrid, matchForm);
         } else {
             add(searchField, matchGrid);

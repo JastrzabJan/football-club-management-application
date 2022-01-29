@@ -28,9 +28,6 @@ public class Training extends AbstractEntity {
     @NotNull(message = "Training Start cannot be empty")
     private LocalDateTime trainingStart;
 
-    @NotNull(message = "Training End cannot be empty")
-    private LocalDateTime trainingEnd;
-
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Training Type cannot be empty")
     private TrainingType trainingType;

@@ -14,10 +14,8 @@ import org.vaadin.stefan.fullcalendar.Entry;
 import org.vaadin.stefan.fullcalendar.FullCalendar;
 import org.vaadin.stefan.fullcalendar.Timezone;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 public class EntryDialog extends Dialog {
 

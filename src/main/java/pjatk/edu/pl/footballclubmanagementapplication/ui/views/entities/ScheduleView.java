@@ -57,7 +57,7 @@ public class ScheduleView extends VerticalLayout {
         calendar.setWidthFull();
 
         calendar.addEntryClickedListener(event -> {
-            if(event.getEntry().getRenderingMode() != Entry.RenderingMode.BACKGROUND && event.getEntry().getRenderingMode() != Entry.RenderingMode.INVERSE_BACKGROUND)
+            if (event.getEntry().getRenderingMode() != Entry.RenderingMode.BACKGROUND && event.getEntry().getRenderingMode() != Entry.RenderingMode.INVERSE_BACKGROUND)
                 new EntryDialog(calendar, event.getEntry()).open();
         });
 
@@ -78,7 +78,6 @@ public class ScheduleView extends VerticalLayout {
         Entry entry = new Entry();
         entry.setTitle(training.getTeam().getName() + " Training");
         entry.setStart(training.getTrainingStart());
-        entry.setEnd(training.getTrainingEnd());
         entry.setColor("#93c47d");
         entry.setCustomProperty("Coach", training.getCoach());
         entry.setCustomProperty("Training Type", training.getTrainingType());
@@ -88,7 +87,7 @@ public class ScheduleView extends VerticalLayout {
     private void addEntryToCalendarForMatch(Match match) {
         Entry entry = new Entry();
         entry.setTitle(match.getTeam().getName() + " Match vs " + match.getOpponentTeam());
-        entry.setStart(match.getGameDate().atStartOfDay());
+        entry.setStart(match.getGameDate());
         entry.setAllDay(true);
         entry.setCustomProperty("Team", match.getTeam());
         entry.setCustomProperty("Opponent Team", match.getOpponentTeam());

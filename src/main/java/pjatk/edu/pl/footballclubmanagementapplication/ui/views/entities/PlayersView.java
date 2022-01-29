@@ -2,16 +2,19 @@ package pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.PlayerService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.ManagerAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.PlayerForm;
 
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
@@ -28,6 +31,7 @@ public class PlayersView extends VerticalLayout {
     private final TeamService teamService;
     private final Grid<PlayerDTO> playerGrid = new Grid<>();
     private final TextField searchField;
+
     public PlayersView(PlayerService playerService, TeamService teamService) {
         this.playerService = playerService;
         this.teamService = teamService;
@@ -49,9 +53,12 @@ public class PlayersView extends VerticalLayout {
         playerGrid.addColumn(PlayerDTO::getBirthDate).setHeader("Birth Date").setSortable(true);
         playerGrid.addColumn(PlayerDTO::getPosition).setHeader("Position").setSortable(true);
         playerGrid.addColumn(PlayerDTO::getNumber).setHeader("Number").setSortable(true);
-        playerGrid.addColumn(PlayerDTO::getTeamNames).setHeader("Teams").setSortable(true);
-
-        playerGrid.asSingleSelect().addValueChangeListener(event -> playerForm.setPlayer(playerGrid.asSingleSelect().getValue()));
+        playerGrid.addComponentColumn(playerDTO -> {
+            ListBox<Team> teamsList = new ListBox<>();
+            teamsList.setItems(playerDTO.getTeams());
+            teamsList.setReadOnly(true);
+            return teamsList;
+        }).setHeader("Teams").setAutoWidth(true);
 
         Button addPlayerButton = new Button("Add Player");
         addPlayerButton.addClickListener(event -> {
@@ -61,7 +68,8 @@ public class PlayersView extends VerticalLayout {
         HorizontalLayout protectedToolbar = new HorizontalLayout(addPlayerButton, searchField);
         HorizontalLayout regularToolbar = new HorizontalLayout(searchField);
         setSizeFull();
-        if (SecurityUtils.isAccessGranted(UsersView.class)) {
+        if (SecurityUtils.isAccessGranted(ManagerAccessMock.class)) {
+            playerGrid.asSingleSelect().addValueChangeListener(event -> playerForm.setPlayer(playerGrid.asSingleSelect().getValue()));
             add(protectedToolbar, searchField, playerGrid, playerForm);
         } else {
             add(regularToolbar, searchField, playerGrid);

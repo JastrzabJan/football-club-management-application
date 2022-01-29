@@ -36,7 +36,7 @@ public class PlayerDTO {
     private String passwordHash;
     private String password;
 
-    @NotNull(message = "Coach role cannot be empty")
+    @NotNull(message = "Role cannot be empty")
     private Role role;
 
     @NotEmpty(message = "Player name cannot be empty")
@@ -66,8 +66,12 @@ public class PlayerDTO {
 
     @NotNull(message = "Player must have assigned Position")
     private Position position;
+
     private List<String> teamNames;
+
     private User user;
+
     private Set<PlayerTrainingAttendance> playerTrainingAttendances;
+
     private Set<Team> teams;
 }

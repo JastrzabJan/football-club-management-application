@@ -57,6 +57,7 @@ public class CoachDTO {
 
     private List<String> teamNames;
     private User user;
+
     private Set<Team> teams;
 
     @NotNull(message = "Coach qualifications cannot be empty")

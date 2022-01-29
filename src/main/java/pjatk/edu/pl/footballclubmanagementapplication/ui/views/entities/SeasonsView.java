@@ -8,14 +8,14 @@ import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Season;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.SeasonService;
+import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.ManagerAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.SeasonForm;
 
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_SEASONS;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.*;
 
-@Secured({ADMIN_ROLE, MANAGER_ROLE})
+@Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE, PLAYER_ROLE})
 @Route(value = PAGE_SEASONS, layout = MainLayout.class)
 public class SeasonsView extends VerticalLayout {
 
@@ -27,20 +27,26 @@ public class SeasonsView extends VerticalLayout {
         SeasonForm seasonForm = new SeasonForm(this, seasonService);
         seasonForm.setSeason(null);
 
-        seasonGrid.addColumn(Season::getName).setHeader("Name");
-        seasonGrid.addColumn(Season::getStartDate).setHeader("Start Date");
-        seasonGrid.addColumn(Season::getEndDate).setHeader("End Date");
-
-        seasonGrid.asSingleSelect().addValueChangeListener(event -> seasonForm.setSeason(seasonGrid.asSingleSelect().getValue()));
+        seasonGrid.addColumn(Season::getName).setHeader("Name").setSortable(true);
+        seasonGrid.addColumn(Season::getStartDate).setHeader("Start Date").setSortable(true);
+        seasonGrid.addColumn(Season::getEndDate).setHeader("End Date").setSortable(true);
 
         Button addSeasonButton = new Button("Add Season");
         addSeasonButton.addClickListener(event -> {
             seasonGrid.asSingleSelect().clear();
             seasonForm.setSeason(new Season());
         });
-        HorizontalLayout toolbar = new HorizontalLayout(addSeasonButton);
+
+
+        if (SecurityUtils.isAccessGranted(ManagerAccessMock.class)) {
+            HorizontalLayout toolbar = new HorizontalLayout(addSeasonButton);
+            seasonGrid.asSingleSelect().addValueChangeListener(event -> seasonForm.setSeason(seasonGrid.asSingleSelect().getValue()));
+            add(toolbar, seasonGrid, seasonForm);
+        } else {
+            add(seasonGrid);
+        }
+        
         setSizeFull();
-        add(toolbar, seasonGrid, seasonForm);
         updateList();
 
     }

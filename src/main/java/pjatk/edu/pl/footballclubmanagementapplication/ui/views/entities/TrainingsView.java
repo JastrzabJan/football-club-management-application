@@ -12,16 +12,16 @@ import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Player;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.PlayerTrainingAttendance;
-import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Training;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.*;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.CoachAccessMock;
-import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.PlayerViewAccess;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.ManagerAccessMock;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.PlayerAccessMock;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.PlayerAccessOnly;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.TrainingForm;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
@@ -53,14 +53,13 @@ public class TrainingsView extends VerticalLayout {
         trainingForm.setTraining(null);
 
         trainingGrid.addColumn(Training::getTrainingStart).setHeader("Training Start Date");
-        trainingGrid.addColumn(Training::getTrainingEnd).setHeader("Training End Date");
         trainingGrid.addColumn(Training::getTrainingType).setHeader("Training Type");
         trainingGrid.addColumn(Training::getCoach).setHeader("Training Coach");
         trainingGrid.addColumn(Training::getTeam).setHeader("Training Team");
 
-        if (SecurityUtils.isAccessGranted(PlayerViewAccess.class)) {
+        if (SecurityUtils.isAccessGranted(PlayerAccessOnly.class)) {
             trainingGrid.addComponentColumn(training -> {
-                Checkbox attendanceCheckbox = new Checkbox("Attendance");
+                Checkbox attendanceCheckbox = new Checkbox("Confirm Attendance");
                 Player player = playerService.findByUsernameAndTeam(SecurityUtils.getUsername(), training.getTeam());
                 if (player != null) {
 
@@ -99,10 +98,10 @@ public class TrainingsView extends VerticalLayout {
         });
         HorizontalLayout toolbar = new HorizontalLayout(addTrainingButton);
         setSizeFull();
-        if (SecurityUtils.isAccessGranted(CoachesView.class)) {
+        if (SecurityUtils.isAccessGranted(CoachAccessMock.class)) {
             add(toolbar, trainingGrid, trainingForm);
         } else {
-            add(trainingGrid, trainingForm);
+            add(trainingGrid);
         }
         updateList();
 

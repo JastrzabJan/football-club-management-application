@@ -4,6 +4,7 @@ package pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +43,9 @@ public class User extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public String getEmptyPassword() {
+        return "";
+    }
 
 }
 

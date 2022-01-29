@@ -89,6 +89,21 @@ public class DataGenerator {
             userRepository.save(user);
             testPlayers.add(player);
         }
+        Player testPlayer = addPlayer(playerRepository, faker.name().firstName(),
+                faker.name().lastName(),
+                faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                faker.address().fullAddress(),
+                faker.idNumber().valid(),
+                faker.phoneNumber().phoneNumber(),
+                faker.number().randomDigit(),
+                team);
+        testPlayer.setUser(playerUser);
+        playerRepository.save(testPlayer);
+        playerUser.setPlayer(testPlayer);
+        userRepository.save(playerUser);
+        testPlayers.add(testPlayer);
+
+
         for (int i = 0; i < 2; i++) {
             User user = addUser(userRepository, passwordEncoder, faker.bothify("????##@gmail.com"), faker.name().firstName(), Role.Coach);
             Coach coach = addCoach(coachRepository, faker.name().firstName(),
@@ -103,6 +118,19 @@ public class DataGenerator {
             userRepository.save(user);
             testCoaches.add(coach);
         }
+        Coach testCoach = addCoach(coachRepository, faker.name().firstName(),
+                faker.name().lastName(),
+                faker.date().birthday().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                faker.address().fullAddress(),
+                faker.phoneNumber().phoneNumber(),
+                team);
+
+        testCoach.setUser(coachUser);
+        coachRepository.save(testCoach);
+        coachUser.setCoach(testCoach);
+        userRepository.save(coachUser);
+        testCoaches.add(testCoach);
+
         team.setCoach(testCoaches.stream().findFirst().get());
         team.setPlayers(testPlayers);
         teamRepository.save(team);

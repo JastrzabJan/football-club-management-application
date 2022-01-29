@@ -19,15 +19,13 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.service.SeasonServ
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamLeagueSeasonService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.MainLayout;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.ManagerAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.LeagueForm;
 
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.ADMIN_ROLE;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.COACH_ROLE;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.MANAGER_ROLE;
-import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.PAGE_LEAGUES;
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.FrontendConstants.*;
 import static pjatk.edu.pl.footballclubmanagementapplication.ui.utils.SearchUtils.generateSearchField;
 
-@Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE})
+@Secured({ADMIN_ROLE, MANAGER_ROLE, COACH_ROLE, PLAYER_ROLE})
 @Route(value = PAGE_LEAGUES, layout = MainLayout.class)
 public class LeaguesView extends VerticalLayout {
 
@@ -92,9 +90,6 @@ public class LeaguesView extends VerticalLayout {
             return viewButton;
         });
 
-        leaguesGrid.asSingleSelect().addValueChangeListener(event -> leagueForm.setLeague(leaguesGrid.asSingleSelect().getValue()));
-
-
         Button addLeagueButton = new Button("Add League");
         addLeagueButton.addClickListener(event -> {
             leaguesGrid.asSingleSelect().clear();
@@ -106,7 +101,8 @@ public class LeaguesView extends VerticalLayout {
 
         setSizeFull();
 
-        if (SecurityUtils.isAccessGranted(CoachesView.class)) {
+        if (SecurityUtils.isAccessGranted(ManagerAccessMock.class)) {
+            leaguesGrid.asSingleSelect().addValueChangeListener(event -> leagueForm.setLeague(leaguesGrid.asSingleSelect().getValue()));
             add(protectedToolbar, searchField, leaguesGrid, leagueGrid, leagueForm);
         } else {
             add(regularToolbar, searchField, leaguesGrid, leagueGrid);

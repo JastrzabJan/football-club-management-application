@@ -54,8 +54,6 @@ public class TeamsView extends VerticalLayout {
         this.searchField.addValueChangeListener(e -> updateList());
 
 
-        teamGrid.asSingleSelect().addValueChangeListener(event -> teamForm.setTeam(teamGrid.asSingleSelect().getValue()));
-
         Button addTeamButton = new Button("Add Team");
         addTeamButton.addClickListener(event -> {
             teamGrid.asSingleSelect().clear();
@@ -64,6 +62,7 @@ public class TeamsView extends VerticalLayout {
         HorizontalLayout toolbar = new HorizontalLayout(addTeamButton);
         setSizeFull();
         if (SecurityUtils.isAccessGranted(UsersView.class)) {
+            teamGrid.asSingleSelect().addValueChangeListener(event -> teamForm.setTeam(teamGrid.asSingleSelect().getValue()));
             add(toolbar, searchField, teamGrid, teamForm);
         } else {
             add(searchField, teamGrid);

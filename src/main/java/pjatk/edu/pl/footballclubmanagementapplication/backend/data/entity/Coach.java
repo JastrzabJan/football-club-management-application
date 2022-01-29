@@ -26,11 +26,11 @@ public class Coach extends AbstractEntity {
 //    )
 
     @NotEmpty(message = "Coach name cannot be empty")
-    @Size(max = 255)
+    @Size(max = 255, message = "Address Field length cannot exceed 255 characters")
     private String name;
 
     @NotEmpty(message = "Coach surname cannot be empty")
-    @Size(max = 255)
+    @Size(max = 255, message = "Address Field length cannot exceed 255 characters")
     private String surname;
     private LocalDate birthDate;
 
@@ -39,7 +39,7 @@ public class Coach extends AbstractEntity {
     private String phoneNumber;
 
     @NotEmpty(message = "Coach address cannot be empty")
-    @Size(max = 255)
+    @Size(max = 255, message = "Address Field length cannot exceed 255 characters")
     private String Address;
 
     @OneToOne(cascade = CascadeType.MERGE)

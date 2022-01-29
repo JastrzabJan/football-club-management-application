@@ -1,7 +1,5 @@
 package pjatk.edu.pl.footballclubmanagementapplication.backend.service;
 
-import com.vaadin.flow.router.NotFoundException;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -111,6 +109,7 @@ public class PlayerService implements CrudService<Player> {
             player.setTeams(playerDTO.getTeams());
             player.setPESEL(playerDTO.getPESEL());
             player.setPlayerTrainingAttendances(playerDTO.getPlayerTrainingAttendances());
+            player.setPosition(playerDTO.getPosition());
             player.setNumber(playerDTO.getNumber());
             player.setBirthDate(playerDTO.getBirthDate());
             player.setAddress(playerDTO.getAddress());
@@ -136,6 +135,7 @@ public class PlayerService implements CrudService<Player> {
             player.setSurname(playerDTO.getSurname());
             player.setTeams(playerDTO.getTeams());
             player.setPESEL(playerDTO.getPESEL());
+            player.setPosition(playerDTO.getPosition());
             player.setPlayerTrainingAttendances(playerDTO.getPlayerTrainingAttendances());
             player.setNumber(playerDTO.getNumber());
             player.setPosition(playerDTO.getPosition());

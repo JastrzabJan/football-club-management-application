@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -17,6 +18,8 @@ import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.CoachesView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.TeamsView;
 
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.utils.ButtonProvider.*;
+
 public class TeamForm extends FormLayout {
 
     private final TeamsView teamsView;
@@ -27,8 +30,10 @@ public class TeamForm extends FormLayout {
     private final TextField teamClass = new TextField("Team Class");
     private final ComboBox<Coach> coach = new ComboBox<>("Coach");
 
-    private final Button save = new Button("Save");
-    private final Button delete = new Button("Delete");
+    Notification validationErrorNotification = createValidationErrorNotification();
+
+    private final Button save = createDeleteButton();
+    private final Button delete = createSaveButton();
 
     private final BeanValidationBinder<Team> binder = new BeanValidationBinder<>(Team.class);
 
@@ -43,7 +48,7 @@ public class TeamForm extends FormLayout {
         coach.setRequired(true);
         binder.bindInstanceFields(this);
 
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
+        HorizontalLayout buttons = new HorizontalLayout(save, delete, validationErrorNotification);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         binder.addStatusChangeListener(event -> {
@@ -76,10 +81,14 @@ public class TeamForm extends FormLayout {
     }
 
     private void save() {
-        Team team = binder.getBean();
-        teamService.save(team);
-        teamsView.updateList();
-        setTeam(null);
+        if(binder.validate().isOk()) {
+            Team team = binder.getBean();
+            teamService.save(team);
+            teamsView.updateList();
+            setTeam(null);
+        }else{
+            validationErrorNotification.open();
+        }
     }
 
     private void delete() {

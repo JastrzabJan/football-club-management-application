@@ -5,13 +5,13 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import org.vaadin.gatanaso.MultiselectComboBox;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Position;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
@@ -19,8 +19,10 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.dto.PlayerDTO;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.PlayerService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.ManagerAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.PlayersView;
-import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.UsersView;
+
+import static pjatk.edu.pl.footballclubmanagementapplication.ui.views.components.utils.ButtonProvider.*;
 
 
 public class PlayerForm extends FormLayout {
@@ -29,7 +31,7 @@ public class PlayerForm extends FormLayout {
     private final PlayerService playerService;
     private final TeamService teamService;
 
-    private final EmailField email = new EmailField("Email");
+    private final TextField email = new TextField("Email");
     private final PasswordField password = new PasswordField("Password");
     private final TextField name = new TextField("Name");
     private final TextField surname = new TextField("Surname");
@@ -41,12 +43,23 @@ public class PlayerForm extends FormLayout {
     private final DatePicker birthDate = new DatePicker("Birthdate");
     private final IntegerField number = new IntegerField("Number");
 
-    private final Button save = new Button("Save");
-    private final Button delete = new Button("Delete");
+    Notification validationErrorNotification = createValidationErrorNotification();
+
+    private final Button save = createDeleteButton();
+    private final Button delete = createSaveButton();
 
     private final BeanValidationBinder<PlayerDTO> binder = new BeanValidationBinder<>(PlayerDTO.class);
 
     public PlayerForm(PlayersView playersView, PlayerService playerService, TeamService teamService) {
+        password.setValueChangeMode(ValueChangeMode.EAGER);
+        name.setValueChangeMode(ValueChangeMode.EAGER);
+        email.setValueChangeMode(ValueChangeMode.EAGER);
+        surname.setValueChangeMode(ValueChangeMode.EAGER);
+        address.setValueChangeMode(ValueChangeMode.EAGER);
+        pesel.setValueChangeMode(ValueChangeMode.EAGER);
+        phoneNumber.setValueChangeMode(ValueChangeMode.EAGER);
+        number.setValueChangeMode(ValueChangeMode.EAGER);
+
         this.playerService = playerService;
         this.playersView = playersView;
         this.teamService = teamService;
@@ -54,28 +67,19 @@ public class PlayerForm extends FormLayout {
         email.setErrorMessage("Please enter a valid email address");
         position.setItems(Position.values());
         teams.setItems(teamService.findAll());
-//        binder.forField(password).bind(PlayerDTO::getPassword, PlayerDTO::setPassword);
-//        binder.bind(password, PlayerDTO::getPassword, PlayerDTO::setPassword);
-//        binder.bind(pesel, PlayerDTO::getPESEL, PlayerDTO::setPESEL);
-//        binder.bind(name, PlayerDTO::getName, PlayerDTO::setName);
-//        binder.bind(surname, PlayerDTO::getSurname, PlayerDTO::setSurname);
-//        binder.bind(address, PlayerDTO::getAddress, PlayerDTO::setAddress);
-//        binder.bind(birthDate, PlayerDTO::getBirthDate, PlayerDTO::setBirthDate);
-//        binder.bind(phoneNumber, PlayerDTO::getPhoneNumber, PlayerDTO::setPhoneNumber);
-//        binder.bind(position, PlayerDTO::getPosition, PlayerDTO::setPosition);
-//        binder.bind(teams, PlayerDTO::getTeams, PlayerDTO::setTeams);
-//        binder.bind(number, PlayerDTO::getNumber, PlayerDTO::setNumber);
 
-        HorizontalLayout buttons = new HorizontalLayout(save, delete);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        if(SecurityUtils.isAccessGranted(UsersView.class)) {
-            add(email, password, pesel, name, surname, address, birthDate, phoneNumber, position, number, teams, buttons);
-        }else {
-            add(position, number);
-        }
-        binder.bindInstanceFields(this);
+        HorizontalLayout buttons = new HorizontalLayout(save, delete, validationErrorNotification);
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         save.addClickListener(buttonClickEvent -> save());
         delete.addClickListener(buttonClickEvent -> delete());
+
+        binder.bindInstanceFields(this);
+
+        if (SecurityUtils.isAccessGranted(ManagerAccessMock.class)) {
+            add(email, password, pesel, name, surname, address, birthDate, phoneNumber, position, number, teams, buttons);
+        } else {
+            add(position, number, name, surname, teams, validationErrorNotification);
+        }
     }
 
     public void setPlayer(PlayerDTO player) {
@@ -90,10 +94,14 @@ public class PlayerForm extends FormLayout {
     }
 
     private void save() {
-        PlayerDTO player = binder.getBean();
-        playerService.save(player);
-        playersView.updateList();
-        setPlayer(null);
+        if (binder.validate().isOk()) {
+            PlayerDTO player = binder.getBean();
+            playerService.save(player);
+            playersView.updateList();
+            setPlayer(null);
+        } else {
+            validationErrorNotification.open();
+        }
     }
 
     private void delete() {
