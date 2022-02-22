@@ -7,7 +7,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.League;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.LeagueService;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.LeaguesView;

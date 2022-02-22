@@ -61,6 +61,10 @@ public class PlayerService implements CrudService<Player> {
         return getRepository().findAll().stream().filter(player -> player.getUser().getEmail().equals(username) && player.getTeams().contains(team)).findFirst().orElse(null);
     }
 
+    public Player findByUsername(String username) {
+        return getRepository().findAll().stream().filter(player -> player.getUser().getEmail().equals(username)).findFirst().orElse(null);
+    }
+
     public List<PlayerDTO> getAllPlayersDTO() {
         return playerRepository.findAll().stream().map(this::convertToPlayerDTO).collect(Collectors.toList());
     }

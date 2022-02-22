@@ -18,6 +18,7 @@ import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Team;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.MatchService;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.service.TeamService;
 import pjatk.edu.pl.footballclubmanagementapplication.security.SecurityUtils;
+import pjatk.edu.pl.footballclubmanagementapplication.ui.views.accessMocks.CoachAccessMock;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.CoachesView;
 import pjatk.edu.pl.footballclubmanagementapplication.ui.views.entities.MatchesView;
 
@@ -64,7 +65,7 @@ public class MatchForm extends FormLayout {
 
         HorizontalLayout buttons = new HorizontalLayout(save, delete, validationErrorNotification);
 
-        if (SecurityUtils.isAccessGranted(CoachesView.class)) {
+        if (SecurityUtils.isAccessGranted(CoachAccessMock.class)) {
             add(team, opponentTeam, place, goalsHome, goalsAway, gameDate, buttons);
         } else {
             add(team, opponentTeam, place, goalsHome, goalsAway, gameDate);

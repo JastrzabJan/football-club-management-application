@@ -2,11 +2,13 @@ package pjatk.edu.pl.footballclubmanagementapplication.backend.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Player;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.Training;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.data.entity.User;
 import pjatk.edu.pl.footballclubmanagementapplication.backend.repository.TrainingRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainingService implements CrudService<Training> {
@@ -39,5 +41,9 @@ public class TrainingService implements CrudService<Training> {
 
     public List<Training> getAllTrainings() {
         return getRepository().findAll();
+    }
+
+    public List<Training> getAllTrainingForPlayer(Player player){
+        return getAllTrainings().stream().filter(training -> player.getTeams().contains(training.getTeam())).collect(Collectors.toList());
     }
 }

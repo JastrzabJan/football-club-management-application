@@ -42,6 +42,7 @@ public class TrainingsView extends VerticalLayout {
 
     private final Grid<Training> trainingGrid = new Grid<>();
 
+
     public TrainingsView(TrainingService trainingService, CoachService coachService, TeamService teamService, PlayerTrainingAttendanceService playerTrainingAttendanceService, PlayerService playerService) {
         this.trainingService = trainingService;
         this.coachService = coachService;
@@ -108,7 +109,11 @@ public class TrainingsView extends VerticalLayout {
     }
 
     public void updateList() {
-        trainingGrid.setItems(trainingService.getAllTrainings());
+        if(SecurityUtils.isAccessGranted(PlayerAccessOnly.class)){
+            trainingGrid.setItems(trainingService.getAllTrainingForPlayer(playerService.findByUsername(SecurityUtils.getUsername())));
+        }else {
+            trainingGrid.setItems(trainingService.getAllTrainings());
+        }
     }
 
     public boolean  getCheckboxValue(Training training, Player player) {
